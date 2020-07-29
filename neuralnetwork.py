@@ -8,6 +8,8 @@ Created on Wed Jul  1 20:07:12 2020
 import numpy as np
 from numpy import exp
 
+# Funciones de activación y sus funciones inversas
+
 def relu(x):
     return x if x > 0 else 0
 
@@ -26,6 +28,8 @@ def inv_sigmoid(x):
 def inv_hyp_tangent(x):
     return 1 / hyp_tangent(x)
 
+# Aplicación de las funciones de activación a cada elemento de un array
+
 def activation(x, function):
     if function == "relu":
         for i in range(len(x[0])):
@@ -42,6 +46,8 @@ def activation(x, function):
     else:
         return x
 
+# Aplicación de las funciones inversas de activación utilizadas en el proceso de backpropagation    
+
 def deactivation(x, function):
     if function == "relu":
         for i in range(len(x)):
@@ -57,6 +63,8 @@ def deactivation(x, function):
         return x
     else:
         return x  
+
+# Clase de la Red Neuronal
 
 class NeuralNetwork:
     
@@ -128,29 +136,3 @@ class NeuralNetwork:
             deriv = deriv @ store_weights.T
             deriv_f = deactivation(self.register[2 * i].copy(), self.functions[i-2])
             deriv = np.asmatrix(deriv)
-
-        
-        
-        
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
-    x_len = 3
-    y_len = [4, 3]
-    z_len = 2
-    nn = NeuralNetwork(x_len, z_len, y_len, ["relu", "relu"], "sigmoid")
-    x = [0.1, 0.5, 0.4]
-    z_real = [0.5, 0.3]
-    error = []
-    z1 = []
-    z2 = []
-    for _ in range(50):
-        z = nn.forward(x)[0]
-        z1.append(z[0])
-        z2.append(z[1])
-        error.append(nn.loss_error(z, z_real))
-        nn.backpropagation(0.01)
-        print(x, z, z_real)
-    plt.plot(error)
-    plt.plot(z1)
-    plt.plot(z2)
-    plt.figure()
